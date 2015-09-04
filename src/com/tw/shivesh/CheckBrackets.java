@@ -22,11 +22,7 @@ public class CheckBrackets {
 		bracketPair.put(')', '(');
 		bracketPair.put(']', '[');
 		
-		List<Character> permittedBrackets = new ArrayList<Character>();
-		permittedBrackets.add('(');
-		permittedBrackets.add(')');
-		permittedBrackets.add('[');
-		permittedBrackets.add(']');
+		List<Character> permittedBrackets = getPermittedBrackets();
 		List<Character> onlyBrackets = getOnlyBrackets(string,permittedBrackets);
 		
 		if (onlyBrackets.size() % 2 == 0 && checkBracketLogic(onlyBrackets, bracketPair)) {
@@ -34,6 +30,33 @@ public class CheckBrackets {
 		} else {
 			return false;
 		}
+	}
+
+	private static boolean checkBracketLogic(List<Character> onlyBrackets,Map<Character, Character> bracketPair) {
+		Stack<Character> bracketStack = new Stack<Character>();
+		for (Character eachBracket : onlyBrackets) {
+			if (eachBracket == '(' || eachBracket == '[') {
+				bracketStack.push(eachBracket);
+			} else if(!bracketStack.empty()) {
+				bracketPair.get(eachBracket).equals(bracketStack.peek());
+				bracketStack.pop();
+			}else{
+				return false;
+			}
+		}
+		if (bracketStack.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+	
+	private static List<Character> getPermittedBrackets() {
+		List<Character> permittedBrackets = new ArrayList<Character>();
+		permittedBrackets.add('(');
+		permittedBrackets.add(')');
+		permittedBrackets.add('[');
+		permittedBrackets.add(']');
+		return permittedBrackets;
 	}
 
 	private static List<Character> getOnlyBrackets(String string,List<Character> permittedBrackets) {
@@ -47,21 +70,4 @@ public class CheckBrackets {
 		return onlyBrackets;
 	}
 
-	private static boolean checkBracketLogic(List<Character> brackets,Map<Character, Character> map) {
-		Stack<Character> bracketStack = new Stack<Character>();
-		for (Character eachBracket : brackets) {
-			if (eachBracket == '(' || eachBracket == '[') {
-				bracketStack.push(eachBracket);
-			} else if(!bracketStack.empty()) {
-				map.get(eachBracket).equals(bracketStack.peek());
-				bracketStack.pop();
-			}else{
-				return false;
-			}
-		}
-		if (bracketStack.isEmpty()) {
-			return true;
-		}
-		return false;
-	}
 }
